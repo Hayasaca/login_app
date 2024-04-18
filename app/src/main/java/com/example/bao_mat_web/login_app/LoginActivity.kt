@@ -9,6 +9,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.bao_mat_web.login_app.databinding.ActivityLoginBinding
 import com.example.bao_mat_web.login_app.databinding.ActivitySignupBinding
+import java.nio.charset.StandardCharsets
+import java.security.MessageDigest
 
 class LoginActivity : AppCompatActivity() {
 
@@ -35,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginDatabase(username: String, password: String){
-        val userExists = databaseHelper.readUser(username, password)
+        val userExists = databaseHelper.readUser(username, databaseHelper.hashPassword(password))
         if (userExists){
             Toast.makeText(this, "Login Succesful", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, MainActivity::class.java)

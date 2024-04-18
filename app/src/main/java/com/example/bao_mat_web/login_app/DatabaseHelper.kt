@@ -4,6 +4,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import java.nio.charset.StandardCharsets
+import java.security.MessageDigest
 
 class DatabaseHelper(private val context: Context):
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION){
@@ -21,7 +23,7 @@ class DatabaseHelper(private val context: Context):
         val createTableQuery = ("CREATE TABLE $TABLE_NAME (" +
                 "$COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "$COLUMN_USERNAME TEXT, " +
-                "$COLUMN_PASSWORD, TEXT)")
+                "$COLUMN_PASSWORD TEXT)")
         db?.execSQL(createTableQuery)
     }
 
@@ -49,5 +51,18 @@ class DatabaseHelper(private val context: Context):
         val userExists = cursor.count > 0
         cursor.close()
         return userExists
+    }
+
+    fun hashPassword(password: String): String {
+        val md = MessageDigest.getInstance("SHA-256")
+        val bytes = md.digest(password.toByteArray(StandardCharsets.UTF_8))
+        val hexString = StringBuilder()
+
+        for (byte in bytes) {
+            val hex = String.format("%02x", byte)
+            hexString.append(hex)
+        }
+
+        return hexString.toString()
     }
 }
