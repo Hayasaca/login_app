@@ -19,3 +19,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Keeping main classes
+-keep class com.example.bao_mat_web.login_app.LoginActivity { *; }
+-keep class com.example.bao_mat_web.login_app.MainActivity { *; }
+-keep class com.example.bao_mat_web.login_app.SignupActivity { *; }
